@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# dbusers=("databases")
+# passwords=("passwords")
+
+for t in ${!dbusers[@]};
+do
+  # echo $t
+  database=${dbusers[$t]}
+  password=${passwords[$t]}
+  # echo "database is $database and password is $password";
+  echo "**** CREATE DATABASE ****";
+  echo "";
+  mysql -e "CREATE DATABASE $database";
+
+  echo "**** create user $database ****";
+  echo "";
+  mysql -e "CREATE USER '$database'@'%' IDENTIFIED BY '$password'";
+  mysql -e "CREATE USER '$database'@'45.32.100.107' IDENTIFIED BY '$password'";
+
+  echo "**** grant permission on $database to $database ****";
+  echo "";
+  mysql -e "GRANT ALL PRIVILEGES ON $database.* to '$database'@'%' WITH GRANT OPTION";
+done
